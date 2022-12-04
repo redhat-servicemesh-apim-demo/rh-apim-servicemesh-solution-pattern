@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Solution Pattern: Name Template :: Solution Patterns for Cloud Native Architectures</title>
+    <link rel="canonical" href="https://redhat-solution-patterns.github.io/solution-patterns/comprehensive-service-architecture/02-architecture.html">
+    <link rel="prev" href="index.html">
+    <link rel="next" href="03-demo.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () { 
+      const urlParams = new URLSearchParams(window.location.search);
+      const clusterName = urlParams.get('CLUSTER_WILDCARD_URL');
+      const projectName = urlParams.get('PROJECT');
+      if (clusterName) {
+        showCluster( clusterName );
+      }
+      else {
+        showClusterForm();
+      }
+
+      if (projectName) {
+        showProject( projectName );
+      } else {
+        showProjectForm();
+      }
+    } );
+
+
+    function sliceCluster(clusterName){
+      if (clusterName.length > 70) {
+          return "..." + clusterName.slice(35);
+      } else {
+          return clusterName;
+      }
+    }
+
+    function showCluster( clusterName ) {
+      document.getElementById('navbar-form-empty').style.display = "none";
+      document.getElementById('navbar-form-filled').style.display = "flex";
+      document.getElementById('cluster_subdomain').textContent = sliceCluster(clusterName);
+      document.getElementById('clusterfield2').value = clusterName;
+
+    }
+
+    function showClusterForm( clusterName ) {
+      document.getElementById('navbar-form-empty').style.display = "flex";
+      document.getElementById('navbar-form-filled').style.display = "none";
+    }
+
+    function gowithcluster() {
+      elClusterInput = document.getElementById('clusterfield');
+      elProjectInput = document.getElementById('projectfield2');
+
+      // Remove Project from URL query parameters
+      window.location.search = ('&CLUSTER_WILDCARD_URL=' + elClusterInput.value);
+      // window.location.search = ('&CLUSTER_WILDCARD_URL=' + elClusterInput.value + '&PROJECT=' + elProjectInput.value);
+    }
+
+    function showProject( projectName ) {
+      document.getElementById('navbar-form-project-empty').style.display = "none";
+      document.getElementById('navbar-form-project-filled').style.display = "flex";
+      document.getElementById('project').textContent = projectName;
+      document.getElementById('projectfield2').value = projectName;
+    }
+
+    function showProjectForm( projectName ) {
+      document.getElementById('navbar-form-project-empty').style.display = "flex";
+      document.getElementById('navbar-form-project-filled').style.display = "none";
+    }
+
+    function gowithproject() {
+      elProjectInput = document.getElementById('projectfield');
+      elClusterInput = document.getElementById('clusterfield2');
+      window.location.search = ('&CLUSTER_WILDCARD_URL=' + elClusterInput.value + '&PROJECT=' + elProjectInput.value);
+    }
+
+  </script>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://redhat-solution-patterns.github.io/" target="_blank"><img
+          src="https://redhat-solution-patterns.github.io/solution-pattern-enhancing-applications/_/img/logo.png" height="40px" alt="Solution Patterns"></a>
+      <a class="navbar-item" style="font-size: 14px; color: white" href="https://redhat-solution-patterns.github.io/solution-patterns">Solution Patterns for Cloud Native Architectures</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item" id="navbar-form-empty">
+          <span class="navbar-text" style="margin-left: 1rem; margin-right: 1rem;">&nbsp;<i style="color: orange;"
+              class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+
+          <form action="javascript:void(0);" onsubmit="gowithcluster();">
+            <input size="40" id="clusterfield" type="text" placeholder="Enter the OpenShift ingress domain value">
+            <input type="hidden" id="projectfield2" name="projectfield2" value="">
+          </form>
+        </div>
+
+        <div class="navbar-item" id="navbar-form-filled" style="display: none;">
+          <span class="navbar-text" id="cluster_subdomain"></span>
+        </div>
+
+         <div class="navbar-item" id="navbar-form-project-empty">
+          <!-- Removing the Project text field and exclamation triangle -->
+          <!-- <span class="navbar-text" style="margin-left: 1rem; margin-right: 1rem;">&nbsp;<i style="color: orange;"
+              class="fa fa-exclamation-triangle" aria-hidden="true"></i></span> -->
+
+          <form action="javascript:void(0);" onsubmit="gowithproject();">
+            <!-- <input size="40" id="projectfield" type="text" placeholder="Enter Project Name"> -->
+            <input type="hidden" id="clusterfield2" name="clusterfield2" value="">
+          </form>
+        </div>
+
+        <div class="navbar-item" id="navbar-form-project-filled" style="display: none;">
+          <span class="navbar-text" style="margin-left: 1rem; margin-right: 1rem;">|</span>
+          <span class="navbar-text" id="project"></span>
+          <span class="navbar-text" style="margin-left: 1rem; margin-right: 1rem;">&nbsp;<i onclick="recycle();" style="color: green;" class="fa fa-recycle" aria-hidden="true"></i></span>
+        </div>
+
+        
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Solution Patterns</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://red.ht/enhance-with-cdc" target="_blank">Adopt Change Data Capture for stack modernization</a>
+            <a class="navbar-item" href="https://red.ht/enhance-with-eda" target="_blank">Enhancing Applications with Application Services</a>
+          </div>
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Other</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-gitops-patterns.io/" target="_blank">GitOps Solution Patterns</a>
+            <a class="navbar-item" href="https://hybrid-cloud-patterns.io/" target="_blank">Hybrid Cloud Solution Patterns</a>
+          </div>
+      </div>
+      <a class="navbar-item" href="https://www.redhat.com/en/products/middleware" target="_blank">Red Hat Application Services</a>
+      <a class="navbar-item" href="https://developers.redhat.com/middleware" target="_blank">Learn more</a>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="comprehensive-service-architecture" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Comprehensive Service Architecture</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">1. Home page</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#use-cases">1.1 Use cases</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#_the_story_behind_this_solution_pattern">1.2 The story behind this solution pattern</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="index.html#_the_solution">1.3 The solution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-architecture.html">2. Architecture</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#_common_challenges">2.1. Common Challenges</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#tech_stack">2.2. Technology stack</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#in_depth">2.3. An in-depth look at the solution&#8217;s architecture</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-demo.html">3. See the Solution in Action</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-demo.html#_demonstration">3.1. Demonstration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="03-demo.html#_run_the_demonstration">3.2. Run this demonstration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-demo.html#_before_getting_started">3.3. Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-demo.html#_installing_the_demo">3.4. Installing the demo</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="03-demo.html#_walkthrough_guide">3.5. Walkthrough guide</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://redhat-solution-patterns.github.io/">4. Other Red Hat Solution Patterns</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Comprehensive Service Architecture</span>
+    <span class="version">master</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Comprehensive Service Architecture</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Comprehensive Service Architecture</a></li>
+    <li><a href="02-architecture.html">2. Architecture</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/redhat-servicemesh-apim-demo/rh-apim-servicemesh-solution-pattern-test/edit/master/documentation/modules/ROOT/pages/02-architecture.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Solution Pattern: Name Template</h1>
+<h1 id="_architecture" class="sect0"><a class="anchor" href="#_architecture"></a><a class="link" href="#_architecture">Architecture</a></h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>The architecture will need to support these paradigms</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Control and monitor services-services traffic within the organization boundaries</p>
+</li>
+<li>
+<p>Support the ability to run microservices securely on zero-trust networks</p>
+</li>
+<li>
+<p>Distributed tracing to troubleshoot and isolate bottlenecks in end-to-end request paths</p>
+</li>
+<li>
+<p>Secure service-service communication from other internal teams such as other BUs or LOBs</p>
+</li>
+<li>
+<p>Secure access to services from external clients and partner portals</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_challenges"><a class="anchor" href="#_common_challenges"></a><a class="link" href="#_common_challenges">1. Common Challenges</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With the proliferation of microservices, managing how these services interact with each other is a challenge. A service mesh can help in easing some of this burden by standardizing and optimising how services work with each other.<br>
+A service mesh</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>creates a centralized point of control in an application</p>
+</li>
+<li>
+<p>adds a transparent layer on existing distributed applications without requiring any changes to the application code</p>
+</li>
+<li>
+<p>provides more complex operational functionality, including A/B testing, canary releases, access control, and end-to-end authentication.</p>
+<div class="literalblock">
+<div class="content">
+<pre>Service meshes manage the east-west type of network communications. East-west traffic indicates a traffic flow inside a data center, Kubernetes cluster, or a distributed system.</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/02-arch-servicemesh-ew.png" alt="02 arch servicemesh ew" width="300">
+</div>
+</div>
+<div class="paragraph">
+<p>On the other hand, APIs are the language of digital business.  It&#8217;s tough to find a company or organization these days that is not exposing APIs to users, customers, clients, and partners as part of their digital transformation.  Examples of capabilities required for traditional API programs include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Scale to large numbers of APIs and request volume</p>
+</li>
+<li>
+<p>End-to-end security with TLS</p>
+</li>
+<li>
+<p>Flexible deployment and traffic routing features to support A/B, Blue/Green, Canary deployments</p>
+</li>
+<li>
+<p>Developer portal to engage and onboard API clients</p>
+</li>
+<li>
+<p>Client authentication and authorization</p>
+</li>
+<li>
+<p>Application-level policy control</p>
+</li>
+<li>
+<p>Analytics</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>API management is typically used in “north south” architectures where API clients live beyond trust and/or organizational boundaries.  API Management makes it easy to manage these APIs, secure, control and monetize them.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/02-arch-apim-nw.png" alt="02 arch apim nw" width="400">
+</div>
+</div>
+<div class="paragraph">
+<p>At the same time, as customers move to Kube-native and microservices architectures, we begin to deal with communication between large numbers of independent APIs to form complete applications. In these “east west” service architectures, there is a need to combine  service mesh capabilities and API management capabilities.
+Some of the reasons could be</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>common services being built for use by the entire enterprise which needs more formal API Management based communication</p>
+</li>
+<li>
+<p>Different LOBs accessing services with a formalised contract and billing services included</p>
+</li>
+<li>
+<p>Need for Rate limiting, throttling, distributed tracing, mutual TLS</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/02-arch-servicemesh-apim.png" alt="02 arch servicemesh apim" width="300">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="tech_stack"><a class="anchor" href="#tech_stack"></a><a class="link" href="#tech_stack">2. Technology Stack</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://developers.redhat.com/products/openshift/overview" target="_blank" rel="noopener">Red Hat OpenShift</a></p>
+</li>
+<li>
+<p><a href="https://www.redhat.com/en/technologies/cloud-computing/openshift/what-is-openshift-service-mesh" target="_blank" rel="noopener">Red Hat OpenShift Service Mesh</a></p>
+</li>
+<li>
+<p><a href="https://developers.redhat.com/products/3scale/overview" target="_blank" rel="noopener">Red Hat 3scale API Management</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_red_hat_openshift_service_mesh"><a class="anchor" href="#_red_hat_openshift_service_mesh"></a><a class="link" href="#_red_hat_openshift_service_mesh">2.1. Red Hat OpenShift Service Mesh</a></h3>
+<div class="paragraph">
+<p>OpenShift Service Mesh helps to connect, manage, and observe microservices-based applications. It is based on open source projects Istio, Jaeger and Kiali to provide connectivity between application services and add capabilities like resiliency, security, observability, routing control, and insights</p>
+</div>
+<div class="paragraph">
+<p><strong>Key features</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>connect services securely by default with transparent TLS encryption</p>
+</li>
+<li>
+<p>enforce a "zero trust" or "need to know" with fine-grained traffic policies based on application identities</p>
+</li>
+<li>
+<p>control traffic flow with effective traffic management, which makes the applications more resilient</p>
+</li>
+<li>
+<p>use service metrics to monitor application health, reliability, and performance</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_red_hat_3scale_api_management"><a class="anchor" href="#_red_hat_3scale_api_management"></a><a class="link" href="#_red_hat_3scale_api_management">2.2. Red Hat 3scale API Management</a></h3>
+<div class="paragraph">
+<p>Red Hat 3scale API Management makes it easy to manage your APIs for internal or external users.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>onboarding new APIs is rapid and easy</p>
+</li>
+<li>
+<p>a custom developer portal and interactive API documentation based on OpenAPI specis provide an easy ay for developers to sign for APIs</p>
+</li>
+<li>
+<p>in built analytics, monetization</p>
+</li>
+<li>
+<p>access Control and Security, and setup rate limits  <br></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="https://developers.redhat.com/products/3scale/overview" target="_blank" rel="noopener">Learn more &gt;&gt;</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_red_hat_api_management_and_openshift_service_mesh_better_together"><a class="anchor" href="#_red_hat_api_management_and_openshift_service_mesh_better_together"></a><a class="link" href="#_red_hat_api_management_and_openshift_service_mesh_better_together">2.3. Red Hat API Management and OpenShift Service Mesh - better together</a></h3>
+<div class="paragraph">
+<p>Most organizations can leverage both API Management and Service Mesh together to build a comprehensive service management architecture.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>API Management manages traffic which flows outside a domain or enterprise boundary</p>
+</li>
+<li>
+<p>Service Mesh  manages traffic within  a domain or enterprise boundary</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The 3scale WebAssembly extension eases the integration of OpenShift Service Mesh and 3scale API Management, and it provides a standard way to inject 3scale API Management configurations into OpenShift Service Mesh for execution in a single data plane. This allows you to label a service running within the Red Hat OpenShift Service Mesh and integrate that service with the 3scale API Management solution.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="in_depth"><a class="anchor" href="#in_depth"></a><a class="link" href="#in_depth">3. An in-depth look at the solution&#8217;s architecture</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Travelz is a local tourism company offering a host of services to their customer from their offices across their city.
+Their customers would walk into their office  and work with an agent to  choose a holiday destination package complete with picking a hotel, car services, flights and insurances!</p>
+</div>
+<div class="paragraph">
+<p>Travelz customer have the following new requirements include<br>
+(a) managing how their internal services speak with each other
+(b) sharing APIs securely with external clients, there could a few challenges that can impact timely delivery.</p>
+</div>
+<div class="paragraph">
+<p>The team would like to adopt an approach which would enable</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ease of deployment, setup and maintenance of application infrastructure</p>
+</li>
+<li>
+<p>less or no impact to existing services so as to limit time, efforts and risk</p>
+</li>
+<li>
+<p>comprehensive application security</p>
+</li>
+<li>
+<p>monitoring usage with a possibility to monetize</p>
+</li>
+<li>
+<p>allow external clients to be able to sign up to the services through self-service</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/architecture-step1.png" alt="architecture step1">
+</div>
+</div>
+<div class="paragraph">
+<p>This demo takes you step by step how the architecture evolves with the business expansion of the company&#8217;s needs.</p>
+</div>
+<div class="sect2">
+<h3 id="_scenario_1_launch_of_travelzs_online_managing_and_visualizing_the_microservices"><a class="anchor" href="#_scenario_1_launch_of_travelzs_online_managing_and_visualizing_the_microservices"></a><a class="link" href="#_scenario_1_launch_of_travelzs_online_managing_and_visualizing_the_microservices">3.1. <strong>Scenario 1 - Launch of Travelz’s Online: Managing and Visualizing the microservices</strong></a></h3>
+<div class="paragraph">
+<p>With the arrival of the Digital World, their loyal customers wanted to Travelz to provide them with the best of holidays wherever the customers are! Travelz had to now go GLOBAL!
+Travelz’s Online Channel business unit aims to launch online tourism services in a number of different countries across the globe under their various  brands!</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/architecture-step2.png" alt="architecture step2">
+</div>
+</div>
+<div class="paragraph">
+<p>With the rapid expansion of of their technical footprint, Travelz IT team would like better control over their tech estate.
+They would like to</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Manage access of the core Travels services from the online channels. These things cost money!</p>
+</li>
+<li>
+<p>Traffic management</p>
+</li>
+<li>
+<p>Intuitive end-to-end observability</p>
+</li>
+<li>
+<p>Monitor and Trace requests</p>
+</li>
+<li>
+<p>Enforce a "zero trust" network security</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For this purpose, Travelz IT introduces a Service Mesh to connect, manage, and observe microservices-based applications.
+OpenShift Service Mesh is based on open source projects Istio, Jaeger and Kiali to provide connectivity between application services and add capabilities like resiliency, security, observability, routing control, and insights</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/architecture-step2_1.png" alt="architecture step2 1">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scenario_2_engaging_with_partners_opening_api_access_to_external_partners"><a class="anchor" href="#_scenario_2_engaging_with_partners_opening_api_access_to_external_partners"></a><a class="link" href="#_scenario_2_engaging_with_partners_opening_api_access_to_external_partners">3.2. <strong>Scenario 2 - Engaging with Partners: Opening API access to external partners</strong></a></h3>
+<div class="paragraph">
+<p>Travelz tourism becomes super popular! And other travel portals want to partner with Travelz!
+Now the team has to extend their tech to</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Allow secure access to internal services to external partners and clients as APIs</p>
+</li>
+<li>
+<p>APIs should be easy to find, understand, integrate with and adopt</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>So, Travelz introduces an API Management to manage access by the external partners. They adopts a <strong>Contract First</strong> approach by creating OpenAPI specifications for their existing and new services before onboarding external clients</p>
+</div>
+<div class="paragraph">
+<p>Travelz build a new version of their Travels service (v2) for partners. So, the Partners will access  v2 and while the internal platforms access v1. The intelligent traffic routing capabilities of Service  make this extremely easy to do this.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/architecture-step3.png" alt="architecture step3">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scenario_3_engaging_with_partners_securing_api_access_north_south_or_external_traffic"><a class="anchor" href="#_scenario_3_engaging_with_partners_securing_api_access_north_south_or_external_traffic"></a><a class="link" href="#_scenario_3_engaging_with_partners_securing_api_access_north_south_or_external_traffic">3.3. <strong>Scenario 3 - Engaging with Partners: Securing API access - North South or External traffic</strong></a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Travelz IT now manages Partner Access to their APIs in such a way that the partners can only access APIs which are protected by a user_key.</p>
+</li>
+<li>
+<p>The developer portal provides the right platform for partner developers to discover, learn, test and sign up for those services.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scenario_4_managing_and_securing_both_external_internal_access_inter_domain_traffic"><a class="anchor" href="#_scenario_4_managing_and_securing_both_external_internal_access_inter_domain_traffic"></a><a class="link" href="#_scenario_4_managing_and_securing_both_external_internal_access_inter_domain_traffic">3.4. <strong>Scenario 4 - Managing and Securing both External &amp; Internal access - Inter Domain Traffic</strong></a></h3>
+<div class="paragraph">
+<p>Travelz IT goes one step further to standardize access of their core Agency Services for both Internal platforms as well External partners.</p>
+</div>
+<div class="paragraph">
+<p>This is made easy with the use of WebAssembly. WebAssembly (sometimes called Wasm) is a binary instruction format for stack-based virtual machines (VMs). This plugin is deployed as a sidecar to the microservices and it communicates directly with the 3scale API Manager, making it easy to secure and manage the existing services without making any changes to them.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://developers.redhat.com/articles/2021/11/18/design-authorization-cache-envoy-proxy-using-webassembly#what_is_envoy_proxy_" target="_blank" rel="noopener">Click here</a>  to learn more about the Wasm plugin.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/architecture-step4.png" alt="Scenario 4"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conclusion"><a class="anchor" href="#_conclusion"></a><a class="link" href="#_conclusion">3.5. <strong>Conclusion</strong></a></h3>
+<div class="paragraph">
+<p>3scale API Management and OpenShift Service Mesh deliver the right capabilities for the right traffic at the right time - for both internal and external clients.
+It allows
+*  standardise and secure connectivity with no changes to existing services.
+* Easy onboarding of partners
+* Monitoring, observability
+* All the components are integrated to  work well together without having to integrate them by yourself
+* The entire setup can be managed via gitops enabling easy setup across the various envirounment from dev to production</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="index.html" class="query-params-link">1. Home page</a></span>
+  <span class="next"><a href="03-demo.html" class="query-params-link">3. See the Solution in Action</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img
+          src="../_/img/app-services-logo.png" height="40px" alt="Cloud Native Architecture Solution Patterns"  href="https://redhat.com" ></a>
+</footer><script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

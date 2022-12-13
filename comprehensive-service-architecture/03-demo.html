@@ -429,6 +429,25 @@ WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
 <div class="ulist">
 <ul>
 <li>
+<p>Login to the <a href="https://console-openshift-console.%CLUSTER_WILDCARD_URL%">Open Shift Console</a> as admin user</p>
+</li>
+<li>
+<p>Click on the admin user name shown on the <a href="https://console-openshift-console.%CLUSTER_WILDCARD_URL%">Openshift console</a> and click on the <strong>Copy Login Command</strong> option.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/copy-login.png" alt="copy-login">
+</div>
+</div>
+</li>
+<li>
+<p>Copy the login command and paste it on the terminal where OpenShift CLI is installed</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/login-command.png" alt="login-command">
+</div>
+</div>
+</li>
+<li>
 <p>Type the below command on you <strong>oc cli</strong> to get the OpenShift ingress domain value and copy it:</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -498,7 +517,7 @@ WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
 </div>
 </li>
 <li>
-<p>Trace each microservice call and interaction using the distributed tracing capability of OpenShift Service Mesh. Login into the <a href="https://jaeger-istio-system.apps.cluster-24vln.24vln.sandbox1725.opentlc.com/">Jaeger UI</a> with OpenShift credentials.</p>
+<p>Trace each microservice call and interaction using the distributed tracing capability of OpenShift Service Mesh. Login into the <a href="https://jaeger-istio-system.%CLUSTER_WILDCARD_URL%">Jaeger UI</a> with OpenShift credentials.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/dist-tracing-nav.png" alt="dist-tracing-nav">

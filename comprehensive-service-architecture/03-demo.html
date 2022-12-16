@@ -243,7 +243,7 @@
     <li><a href="03-demo.html">3. See the Solution in Action</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/redhat-servicemesh-apim-demo/rh-apim-servicemesh-solution-pattern/edit/master/documentation/modules/ROOT/pages/03-demo.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/redhat-solution-patterns/solution-pattern-apim-servicemesh/edit/master/documentation/modules/ROOT/pages/03-demo.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
@@ -287,7 +287,7 @@ Here you find a recorded video of the solution pattern, as well as a walkthrough
 <div class="ulist">
 <ul>
 <li>
-<p>Access to an OpenShift environment, preferably with cluster-admin privileges.</p>
+<p>Access to an OpenShift environment (preferably 4.10), with cluster-admin privileges. This pattern</p>
 </li>
 <li>
 <p>OpenShift CLI</p>
@@ -302,116 +302,11 @@ Here you find a recorded video of the solution pattern, as well as a walkthrough
 </ul>
 </div>
 </li>
-<li>
-<p>Set up SSH connections so Ansible can connect to the managed nodes.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Add your public SSH key to the authorized_keys file on the remote system.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>You can follow this <a href="https://jacobtomlinson.dev/posts/2013/ssh-without-a-password-on-os-x-with-ssh-copy-id/" target="_blank" rel="noopener">link</a> to set up the keys and SSH connections on a Mac</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Test the SSH connection. After setting up the keys you should be able to SSH to the remote machine where OpenShift is installed without needing a password.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Test the SSH connections, for example:</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_setting_up_the_demo_environment"><a class="anchor" href="#_setting_up_the_demo_environment"></a><a class="link" href="#_setting_up_the_demo_environment">3.2. Setting up the demo environment</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Download this repo into your local machine (on any machine where you&#8217;ve installed ansible)
-<a href="https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks" class="bare">https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks</a></p>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks" class="bare">https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks</a></code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>On your terminal, navigate to folder <code>3scale-OSSM-TravelDemo-Playbooks/ansible</code></p>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd 3scale-OSSM-TravelDemo-Playbooks/ansible</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Set the following environment variables. Copy paste the below on your terminal</p>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">TARGET_HOST="Replace with the ssh username of your remote machine"
-OCP_USERNAME="Replace with OpenShift Admin username"
-WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Example:</p>
-</div>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">TARGET_HOST="<a href="mailto:lab-user@bastion.zvbw7.sandbox5.opentlc.com">lab-user@bastion.zvbw7.sandbox5.opentlc.com</a>"
-OCP_USERNAME="kubeadmin"
-WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run the below playbook using the below command and wait until the playbook finishes running</p>
-<div class="listingblock lines_7 console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ansible-playbook -i ${TARGET_HOST}, ./configs/ocp-workloads/ocp-workload.yml \
-                -e"ansible_ssh_private_key_file=~/.ssh/id_rsa" \
-                   -e"ocp_username=${OCP_USERNAME}" \
-                   -e"ocp_workload=${WORKLOAD}" \
-                   -e"ACTION=create"</code></pre>
-</div>
-</div>
-</li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_walkthrough_guide_2"><a class="anchor" href="#_walkthrough_guide_2"></a><a class="link" href="#_walkthrough_guide_2">3.3. Walkthrough guide</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>The Ansible playbook has provisioned the following components and configurations for you:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Travelz application</p>
-</li>
-<li>
-<p>OpenShift Service Mesh configured to connect, manage, and observe Travelz microservices</p>
-</li>
-<li>
-<p>3Scale API Management</p>
-</li>
-<li>
-<p>Partner Booking Apps</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_guide_setup"><a class="anchor" href="#_guide_setup"></a><a class="link" href="#_guide_setup">3.4. Guide Setup</a></h3>
+<h3 id="_guide_setup"><a class="anchor" href="#_guide_setup"></a><a class="link" href="#_guide_setup">3.2. Guide Setup</a></h3>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -420,7 +315,7 @@ WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Complete following instructions to ensure that this guide is configured correctly for your OpenShift cluster.</p>
+<p>Complete following instructions to ensure that this instruction guide is configured correctly for your OpenShift cluster.</p>
 </div>
 </td>
 </tr>
@@ -429,10 +324,10 @@ WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Login to the <a href="https://console-openshift-console.%CLUSTER_WILDCARD_URL%">Open Shift Console</a> as admin user</p>
+<p>Login to the Open Shift Console as admin user</p>
 </li>
 <li>
-<p>Click on the admin user name shown on the <a href="https://console-openshift-console.%CLUSTER_WILDCARD_URL%">Openshift console</a> and click on the <strong>Copy Login Command</strong> option.</p>
+<p>Click on the admin user name shown on the Openshift console and click on the <strong>Copy Login Command</strong> option.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/copy-login.png" alt="copy-login">
@@ -461,6 +356,64 @@ WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
 <div class="content">
 <img src="_images/input-ingress-value.png" alt="input-ingress-value">
 </div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_setting_up_the_demo_environment"><a class="anchor" href="#_setting_up_the_demo_environment"></a><a class="link" href="#_setting_up_the_demo_environment">3.3. Setting up the demo environment</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Download this repo into your local machine (on any machine where you&#8217;ve installed ansible)
+<a href="https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks" class="bare">https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks</a></p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks" class="bare">https://github.com/redhat-servicemesh-apim-demo/3scale-OSSM-TravelDemo-Playbooks</a></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>On your terminal, navigate to folder <code>3scale-OSSM-TravelDemo-Playbooks/ansible</code></p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd 3scale-OSSM-TravelDemo-Playbooks/ansible</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the below playbook using the below command and wait until the playbook finishes running</p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ansible-playbook playbooks/install.yml -e"ACTION=install"</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_walkthrough_guide_2"><a class="anchor" href="#_walkthrough_guide_2"></a><a class="link" href="#_walkthrough_guide_2">3.4. Walkthrough guide</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>The Ansible playbook has provisioned the following components and configurations for you:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Travelz application</p>
+</li>
+<li>
+<p>OpenShift Service Mesh configured to connect, manage, and observe Travelz microservices</p>
+</li>
+<li>
+<p>3Scale API Management</p>
+</li>
+<li>
+<p>Partner Booking Apps</p>
+</li>
+</ul>
 </div>
 </li>
 </ul>
@@ -570,23 +523,7 @@ WORKLOAD="ocp4-workload-3scale-servicemesh-demo"</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Click on the admin user name shown on the <a href="https://console-openshift-console.%CLUSTER_WILDCARD_URL%">Openshift console</a> and click on the <strong>Copy Login Command</strong> option.</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/copy-login.png" alt="copy-login">
-</div>
-</div>
-</li>
-<li>
-<p>Copy the login command and paste it on the terminal where OpenShift CLI is installed</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/login-command.png" alt="login-command">
-</div>
-</div>
-</li>
-<li>
-<p>Deploy v2 version of the travel microservice using the below command and wait for a couple of minutes</p>
+<p>Deploy v2 version of the travel microservice using the below command on your temrinal with <strong>oc cli</strong> and wait for a couple of minutes</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -n travel-agency -f <a href="https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/main/travels/travels-v2.yaml" class="bare">https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/main/travels/travels-v2.yaml</a></code></pre>
@@ -800,6 +737,18 @@ External Applications access the APIs via the inbuilt 3scale  gateway provided o
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get secret -n 3scale system-seed -o json | jq -r .data.ADMIN_PASSWORD | base64 -d</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Please install the <a href="https://stedolan.github.io/jq/download/">jq</a> package on your terminal if you already do not have it
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
@@ -1261,6 +1210,29 @@ API_USER_KEY_VALUE</code> to the other two internal portals i.e. <strong>voyages
 <div class="imageblock">
 <div class="content">
 <img src="_images/kiali-graph-nav.png" alt="kiali-graph-nav">
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uninstalling_the_demo_environment"><a class="anchor" href="#_uninstalling_the_demo_environment"></a><a class="link" href="#_uninstalling_the_demo_environment">3.9. Uninstalling the demo environment</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>On your terminal, navigate to folder <code>3scale-OSSM-TravelDemo-Playbooks/ansible</code></p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd 3scale-OSSM-TravelDemo-Playbooks/ansible</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the below playbook using the below command and wait until the playbook finishes running</p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ansible-playbook playbooks/install.yml -e"ACTION=uninstall"</code></pre>
 </div>
 </div>
 </li>

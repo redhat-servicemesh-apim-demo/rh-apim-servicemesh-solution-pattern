@@ -263,7 +263,7 @@ Here you find a recorded video of the solution pattern, as well as a walkthrough
 <div class="ulist">
 <ul>
 <li>
-<p>Access to an OpenShift environment (preferably 4.10), with cluster-admin privileges. This pattern</p>
+<p>Access to an OpenShift environment (preferably 4.12), with cluster-admin privileges. This pattern</p>
 </li>
 <li>
 <p>OpenShift CLI</p>
@@ -581,7 +581,7 @@ On examining the external virtual service yaml available <a href="https://raw.gi
 <p>Check if the API is accessible externally by copy pasting the below link from your browser.</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="http://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev" class="bare">http://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev</a></code></pre>
+<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="https://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev" class="bare">https://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev</a></code></pre>
 </div>
 </div>
 <div class="imageblock">
@@ -618,7 +618,7 @@ If you do not see the API response in the browser try replacing https with http
 <p>Make around 20 calls to API by either refreshing your browser repeatedly or running the below <strong>curl</strong> command from your terminal.</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl <a href="http://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev" class="bare">http://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev</a>?[1-50]</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl <a href="https://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev" class="bare">https://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev</a>?[1-50]</code></pre>
 </div>
 </div>
 </li>
@@ -671,10 +671,10 @@ If you do not see the traffic through v2 on the graph, you can refresh the graph
 <div class="ulist">
 <ul>
 <li>
-<p>Navigate to <a href="http://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%">Red Company App</a> using this link.</p>
+<p>Navigate to <a href="https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%">Red Company App</a> using this link.</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="http://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%" class="bare">http://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%</a></code></pre>
+<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%" class="bare">https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%</a></code></pre>
 </div>
 </div>
 </li>
@@ -811,10 +811,10 @@ Red App is the name of the partner app that is registered on 3scale API manageme
 </div>
 </li>
 <li>
-<p>Navigate again to <a href="http://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%">Red Company App</a> using this link.</p>
+<p>Navigate again to <a href="https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%">Red Company App</a> using this link.</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="http://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%" class="bare">http://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%</a></code></pre>
+<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%" class="bare">https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%</a></code></pre>
 </div>
 </div>
 </li>
@@ -827,7 +827,7 @@ Red App is the name of the partner app that is registered on 3scale API manageme
 </div>
 </li>
 <li>
-<p>Two other similar partner apps <a href="http://travels-green-ui-green-portal.%CLUSTER_WILDCARD_URL%">Green App</a> and <a href="http://travels-blue-ui-blue-portal.%CLUSTER_WILDCARD_URL%">Blue App</a> have already been deployed</p>
+<p>Two other similar partner apps <a href="https://travels-green-ui-green-portal.%CLUSTER_WILDCARD_URL%">Green App</a> and <a href="https://travels-blue-ui-blue-portal.%CLUSTER_WILDCARD_URL%">Blue App</a> have already been deployed</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/green-app-new.png" alt="green-app-new">
@@ -955,7 +955,13 @@ Red App is the name of the partner app that is registered on 3scale API manageme
 </div>
 </div>
 <div class="paragraph">
-<p>The ServiceMeshExtension custom resource spec provides the configuration that the integration module reads from. The spec is embedded in the host and read by the module. Follow the below steps to configure the  ServiceMeshExtension. <strong>This will setup the API management control plane for us.</strong></p>
+<p>The <em>threescale-wasm-auth</em> module is a WebAssembly module that uses a set of interfaces, known as an application binary interfaces (ABI). This is defined by the Proxy-WASM specification to drive any piece of software that implements the ABI so it can authorize HTTP requests against 3scale.</p>
+</div>
+<div class="paragraph">
+<p>Service Mesh provides a custom resource definition to specify and apply Proxy-WASM extensions to sidecar proxies, known as WasmPlugin. Service Mesh applies this custom resource to the set of workloads that require HTTP API management with 3scale.</p>
+</div>
+<div class="paragraph">
+<p>Follow the below steps to configure the WasmPlugin and integration between 3scale and Service Mesh.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -968,7 +974,7 @@ Red App is the name of the partner app that is registered on 3scale API manageme
 </div>
 </li>
 <li>
-<p>The <strong>service token</strong> will enable the permission for service mesh to be able to access a particular 3scale product. From the 3scale admin-portal navigate to  <strong>Account Settings &gt; Personal &gt; Tokens</strong> and copy the Service Token of the <strong>Travel Demo Internal Product</strong></p>
+<p>The <strong>service token</strong> will enable the permission for service mesh to be able to access a particular 3scale product. From the <a href="https://3scale-admin.%CLUSTER_WILDCARD_URL%/p/admin/user/access_tokens">3scale admin-portal</a> navigate to  <strong>Account Settings &gt; Personal &gt; Tokens</strong> and copy the Service Token of the <strong>Travel Demo Internal Product</strong></p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/service-token-ui.png" alt="service-token-ui">
@@ -976,26 +982,25 @@ Red App is the name of the partner app that is registered on 3scale API manageme
 </div>
 </li>
 <li>
-<p>Create a Custom Resource Definition file for the Service Mesh Extension with name <code>sme-internal.yaml</code> using vim or any other editor on your OC CLI terminal. Press <em>i</em> to go into the insert mode</p>
+<p>Create a Custom Resource Definition file for the WasmPlugin with name <code>wasm-internal.yaml</code> using vim or any other editor on your OC CLI terminal. Press <em>i</em> to go into the insert mode</p>
 </li>
 <li>
 <p>Copy paste the below yaml into the file and replace the <strong>access token</strong>, <strong>service token</strong> values as shown in the image below and save it. To save the file (if using vim), hit <strong>esc</strong> followed by <strong>:</strong> followed by <strong>wq</strong> followed by <strong>enter</strong> to save</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: maistra.io/v1
-kind: ServiceMeshExtension
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: extensions.istio.io/v1alpha1
+kind: WasmPlugin
 metadata:
- name: travel-agency-internal
- namespace: travel-agency
+ name: travel-agency
 spec:
- image: 'registry.redhat.io/openshift-service-mesh/3scale-auth-wasm-rhel8:0.0.1'
- phase: PostAuthZ
+ url: oci://quay.io/3scale/threescale-wasm-auth:v1.0.0
+ phase: AUTHZ
  priority: 100
- workloadSelector:
-   labels:
+ selector:
+   matchLabels:
      app: travels
      version: v1
- config:
+ pluginConfig:
    api: v1
    system:
      name: system
@@ -1051,7 +1056,7 @@ spec:
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/sme-internal.png" alt="sme-internal">
+<img src="_images/wasm-plugin-internal.png" alt="wasm-internal">
 </div>
 </div>
 </li>
@@ -1059,7 +1064,7 @@ spec:
 <p>Apply the CRD to your cluster using the below command</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f sme-internal.yaml</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc apply -f wasm-internal.yaml</code></pre>
 </div>
 </div>
 </li>
@@ -1162,30 +1167,17 @@ Viaggi App is the name one of the internal apps that is registered on 3scale API
 </div>
 </li>
 <li>
-<p>Repeat the same steps of adding the <code>API_USER_KEY_NAME and
-API_USER_KEY_VALUE</code> to the other two internal portals i.e. <strong>voyages</strong> and <strong>travels</strong> deployments and wait for a couple of minutes.</p>
-<div class="paragraph">
-<p>Values for travels portal:</p>
+<p>For the other two portal aka <strong>travels</strong> and <strong>voyages</strong> you can use the below commands to set their respective api keys as environment variables using cli</p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc set env deployment/voyages API_USER_KEY_NAME=user_key API_USER_KEY_VALUE=voyagessecret -n travel-portal
+oc set env deployment/travels API_USER_KEY_NAME=user_key API_USER_KEY_VALUE=travelsecret -n travel-portal</code></pre>
 </div>
-<div class="paragraph">
-<p><code>API_USER_KEY_NAME</code> : <code>user_key</code></p>
-</div>
-<div class="paragraph">
-<p><code>API_USER_KEY_VALUE</code>: <code>travelsecret</code></p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/travels-environment-vars.png" alt="travels-environment-vars">
 </div>
-</div>
-<div class="paragraph">
-<p>Values for voyages portal</p>
-</div>
-<div class="paragraph">
-<p><code>API_USER_KEY_NAME</code> : <code>user_key</code></p>
-</div>
-<div class="paragraph">
-<p><code>API_USER_KEY_VALUE</code>: <code>voyagessecret</code></p>
 </div>
 <div class="imageblock">
 <div class="content">

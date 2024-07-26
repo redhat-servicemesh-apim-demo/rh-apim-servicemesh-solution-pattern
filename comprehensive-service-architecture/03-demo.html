@@ -697,6 +697,27 @@ If you do not see the traffic through v2 on the graph, you can refresh the graph
 <div class="ulist">
 <ul>
 <li>
+<p>Delete the unsecure external route</p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete route istio-ingressgateway -n istio-system</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Try to access the API again from the external route by clicking below and you should now see a message that the api is unavilable at that URL since we deleted the route.</p>
+<div class="listingblock lines_7 console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-weblink hljs" data-lang="weblink"><a href="https://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev" class="bare">https://istio-ingressgateway-istio-system.%CLUSTER_WILDCARD_URL%/travels/Kiev</a></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/app_unavailable.png" alt="app_unavailable">
+</div>
+</div>
+</li>
+<li>
 <p>Navigate to <a href="https://travels-red-ui-red-portal.%CLUSTER_WILDCARD_URL%">Red Company App</a> using this link.</p>
 <div class="listingblock lines_7 console-input">
 <div class="content">
@@ -796,7 +817,7 @@ Please install the <a href="https://stedolan.github.io/jq/download/">jq</a> pack
 <p><strong>Optional</strong> : Navigate to <strong>Integration &gt; Backends</strong>. This is where we provide the base URLs of all the API backends that need to be protected by Red Hat 3scale.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/backend-url.png" alt="backend-url">
+<img src="_images/backend_url.png" alt="backend_url">
 </div>
 </div>
 </li>
